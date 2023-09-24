@@ -1,4 +1,9 @@
 import './App.css';
+import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import PauseRoundedIcon from '@mui/icons-material/PauseRounded';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 
 function App() {
   return (
@@ -7,20 +12,20 @@ function App() {
       <h1 className="title">Tic Toc Tomato</h1>
       <h2 id="timer-label">Focus/Break</h2>
       <span id="time-left">25:00</span>
-      <i id="start_stop">start/pause</i>
+      <button className="btn" id="start_stop"><PlayArrowRoundedIcon fontSize="large" /><PauseRoundedIcon fontSize="large" /></button>
       <div id="secondary-controls">
         <div id="session-controls">
           <h3 id="session-label">Session Duration</h3>
-          <i id="session-decrement">-</i>
+          <button className="btn" id="session-decrement"><RemoveRoundedIcon fontSize="large" /></button>
           <span id="session-length">25</span>
-          <i id="session-increment">+</i>
+          <button className="btn" id="session-increment"><AddRoundedIcon fontSize="large" /></button>
         </div>
-        <i id="reset">reset</i>
+        <button className="btn" id="reset"><RestartAltRoundedIcon fontSize="large" /></button>
         <div id="break-controls">
           <h3 id="break-label">Break Duration</h3>
-          <i id="break-decrement">-</i>
+          <button className="btn" id="break-decrement"><RemoveRoundedIcon fontSize="large" /></button>
           <span id="break-length">5</span>
-          <i id="break-increment">+</i>
+          <button className="btn" id="break-increment"><AddRoundedIcon fontSize="large" /></button>
         </div>
       </div>
     </div>

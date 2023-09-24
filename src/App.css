@@ -1,7 +1,7 @@
 .App {
     margin: 5px 10px;
     border-radius: 20px;
-    padding: 2rem;
+    padding: 0.5rem;
     background-color: grey;
     max-width: 750px;
     display: flex;
@@ -11,19 +11,33 @@
     color: rgb(232, 132, 232);
 
     >* {
-        margin: 0.5rem;
+        margin: 0.25rem;
     }
+
+    .btn {
+        font-size: 2rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 20px;
+        color: rgb(232, 132, 232);
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+
 }
 
 #secondary-controls {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-around;
+    align-items: space-around;
     gap: 1.5rem;
     margin: 1rem;
 
-    >#break-controls>*,
-    #session-controls>* {
-        margin: 0.5rem;
+    #break-controls>*:not(h3),
+    #session-controls>*:not(h3) {
+        padding: 0.5rem;
+        font-size: 2rem;
     }
+
 }
