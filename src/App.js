@@ -1,4 +1,9 @@
+import { useRef, useEffect, useState } from 'react';
+
 import './App.css';
+
+import beep from "./assets/audio/a320-tritone-chime-104562.mp3"
+
 import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import PauseRoundedIcon from '@mui/icons-material/PauseRounded';
@@ -6,13 +11,30 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 
 function App() {
+
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlayAudio = () => {
+    setIsPlaying(true);
+  };
+
+  const audioRef = useRef(null);
+  console.log(audioRef);
+
+  useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play();
+      setIsPlaying(false);
+    }
+  }, [isPlaying]);
+
   return (
     <div className="App">
-      <audio id="beep"></audio>
+      <audio ref={audioRef} id="beep" src={beep} preload="auto" type="audio/mp3"></audio>
       <h1 className="title">Tic Toc Tomato</h1>
       <h2 id="timer-label">Focus/Break</h2>
       <span id="time-left">25:00</span>
-      <button className="btn" id="start_stop"><PlayArrowRoundedIcon fontSize="large" /><PauseRoundedIcon fontSize="large" /></button>
+      <button className="btn" onClick={handlePlayAudio} id="start_stop"><PlayArrowRoundedIcon fontSize="large" /><PauseRoundedIcon fontSize="large" /></button>
       <div id="secondary-controls">
         <div id="session-controls">
           <h3 id="session-label">Session Duration</h3>
