@@ -19,9 +19,16 @@
         font-weight: 700;
         border: none;
         border-radius: 20px;
-        color: rgb(232, 132, 232);
+        color: rgb(237, 62, 237);
         background-color: transparent;
         cursor: pointer;
+        padding: 0.3rem;
+        background-color: rgba(237, 62, 237,0.15);
+    }
+
+    .btn:hover {
+        color: antiquewhite;
+        background-color: rgb(232, 132, 232);
     }
 
 
@@ -31,13 +38,22 @@
     display: flex;
     justify-content: space-around;
     align-items: space-around;
-    gap: 1.5rem;
-    margin: 1rem;
+    gap: 0.65rem;
+    margin: 0.5rem;
 
     #break-controls>*:not(h3),
     #session-controls>*:not(h3) {
-        padding: 0.5rem;
         font-size: 2rem;
     }
 
+}
+
+#time-left{
+    font-size: 7.5rem;
+    font-weight: 900;
+}
+
+#timer-label {
+    font-size: 3.75rem;
+    font-weight: 700;
 }
