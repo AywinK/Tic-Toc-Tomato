@@ -1,0 +1,29 @@
+.App {
+    margin: 5px 10px;
+    border-radius: 20px;
+    padding: 2rem;
+    background-color: grey;
+    max-width: 750px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: rgb(232, 132, 232);
+
+    >* {
+        margin: 0.5rem;
+    }
+}
+
+#secondary-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 1rem;
+
+    >#break-controls>*,
+    #session-controls>* {
+        margin: 0.5rem;
+    }
+}
