@@ -16,45 +16,65 @@ const reducer = (state, action) => {
       return init();
 
     case "BREAK-INC":
-      if (state.breakLength < 60 && state.breakLength > 1) {
+      if (state.breakLength < 60 && state.breakLength >= 1) {
         return { ...state, breakLength: state.breakLength + 1 }
       }
       return state;
 
     case "SESSION-INC":
-      if (state.sessionLength < 60 && state.sessionLength > 1) {
+      if (state.sessionLength < 60 && state.sessionLength >= 1) {
         return { ...state, sessionLength: state.sessionLength + 1 }
       }
       return state;
 
     case "BREAK-DEC":
-      if (state.breakLength < 60 && state.breakLength > 1) {
+      if (state.breakLength <= 60 && state.breakLength > 1) {
         return { ...state, breakLength: state.breakLength - 1 }
       }
       return state;
 
     case "SESSION-DEC":
-      if (state.sessionLength < 60 && state.sessionLength > 1) {
+      if (state.sessionLength <= 60 && state.sessionLength > 1) {
         return { ...state, sessionLength: state.sessionLength - 1 }
       }
       return state;
+
+    case "UPDATE_TIME_LEFT":
+      return updateTimeLeft(state)
 
     default:
       return state;
   }
 }
 
-const init = () => ({
-  isRunning: false,
-  breakLength: 5,
-  sessionLength: 25,
-  timeLeft: 1500,
-  sessionType: "Focus"
-});
+function init() {
+
+  const initialState = {
+    isRunning: false,
+    breakLength: 5,
+    sessionLength: 25,
+    sessionType: "Focus",
+    timeLeft: 1500
+  }
+
+  return initialState;
+}
+
+function updateTimeLeft(state) {
+  if (state.sessionType === "Focus") {
+    return { ...state, timeLeft: state.sessionLength * 60 }
+  } else {
+    return { ...state, timeLeft: state.breakLength * 60 }
+  }
+}
 
 function App() {
 
   const [state, dispatch] = useReducer(reducer, null, init);
+
+  const handleUpdateTimeLeft = () => {
+    dispatch({ type: "UPDATE_TIME_LEFT" })
+  };
 
   const handleReset = () => {
     dispatch({ type: "RESET" });
@@ -91,6 +111,10 @@ function App() {
       setIsPlaying(false);
     }
   }, [isPlaying]);
+
+  useEffect(() => {
+    handleUpdateTimeLeft();
+  }, [state.sessionLength, state.breakLength, state.sessionType])
 
   return (
     <div className="App">
