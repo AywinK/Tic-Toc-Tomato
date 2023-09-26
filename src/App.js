@@ -45,6 +45,9 @@ const reducer = (state, action) => {
     case "UPDATE_IS_PLAYING":
       return { ...state, isPlaying: !state.isPlaying };
 
+    case "COUNT_DOWN":
+      return { ...state, timeLeft: state.timeLeft - 1 };
+
     default:
       return state;
   }
@@ -120,8 +123,20 @@ function App() {
   }, [isPlaying]);
 
   useEffect(() => {
+    setInterval(() => {
+      if (!!state.isPlaying) {
+        dispatch({ type: "COUNT_DOWN" });
+      } else if (state.isPlaying === false) {
+        console.log("paused", state.isPlaying)
+      }
+    }, 1000);
+  }, [state.isPlaying])
+
+  useEffect(() => {
+
     handleUpdateTimeLeft();
-  }, [state.sessionLength, state.breakLength, state.sessionType])
+
+  }, [state.sessionLength, state.breakLength, state.sessionType]);
 
   return (
     <div className="App">
