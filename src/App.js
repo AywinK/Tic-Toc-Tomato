@@ -40,7 +40,10 @@ const reducer = (state, action) => {
       return state;
 
     case "UPDATE_TIME_LEFT":
-      return updateTimeLeft(state)
+      return updateTimeLeft(state);
+
+    case "UPDATE_IS_PLAYING":
+      return { ...state, isPlaying: !state.isPlaying };
 
     default:
       return state;
@@ -60,7 +63,7 @@ function init() {
   return initialState;
 }
 
-function updateTimeLeft(state) {
+const updateTimeLeft = (state) => {
   if (state.sessionType === "Focus") {
     return { ...state, timeLeft: state.sessionLength * 60 }
   } else {
@@ -71,6 +74,10 @@ function updateTimeLeft(state) {
 function App() {
 
   const [state, dispatch] = useReducer(reducer, null, init);
+
+  const handleUpdateIsPlaying = () => {
+    dispatch({ type: "UPDATE_IS_PLAYING" })
+  };
 
   const handleUpdateTimeLeft = () => {
     dispatch({ type: "UPDATE_TIME_LEFT" })
@@ -122,7 +129,10 @@ function App() {
       <h1 className="title">Tic Toc Tomato</h1>
       <h2 id="timer-label">{state.sessionType}</h2>
       <span id="time-left">{`${Math.floor(state.timeLeft / 60)}:`}{state.timeLeft % 60 < 10 ? `0${state.timeLeft % 60}` : state.timeLeft % 60}</span>
-      <button className="btn" onClick={handlePlayAudio} id="start_stop">{!state.isPlaying ? <PlayArrowRoundedIcon fontSize="large" /> : <PauseRoundedIcon fontSize="large" />}</button>
+      <button className="btn" onClick={() => {
+        handlePlayAudio();
+        handleUpdateIsPlaying();
+      }} id="start_stop">{!state.isPlaying ? <PlayArrowRoundedIcon fontSize="large" /> : <PauseRoundedIcon fontSize="large" />}</button>
       <div id="secondary-controls">
         <div id="session-controls">
           <h3 id="session-label">Session Duration</h3>
