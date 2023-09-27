@@ -56,7 +56,7 @@ const reducer = (state, action) => {
       if (state.sessionType === "Focus") {
         return { ...state, sessionType: "Break", timeLeft: state.breakLength * 60 }
       } else if (state.sessionType === "Break") {
-        return { ...state, sessionType: "Break", timeLeft: state.breakLength * 60 }
+        return { ...state, sessionType: "Focus", timeLeft: state.sessionLength * 60 }
       } else {
         console.error("CHANGE_SESION case else triggered, returned original state");
         return state;
