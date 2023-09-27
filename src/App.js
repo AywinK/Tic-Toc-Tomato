@@ -57,9 +57,9 @@ const reducer = (state, action) => {
 
     case "CHANGE_SESSION":
       if (state.sessionType === "Focus") {
-        return { ...state, sessionType: "Break", timeLeft: state.breakLength * 60 }
+        return { ...state, sessionType: "Break", timeLeft: state.breakLength * 60 - 1 }
       } else if (state.sessionType === "Break") {
-        return { ...state, sessionType: "Focus", timeLeft: state.sessionLength * 60 }
+        return { ...state, sessionType: "Focus", timeLeft: state.sessionLength * 60 - 1 }
       } else {
         console.error("CHANGE_SESION case else triggered, returned original state");
         return state;
@@ -85,10 +85,12 @@ function init() {
 }
 
 const updateTimeLeft = (state) => {
-  if (state.sessionType === "Focus") {
+  if (state.sessionType === "Focus" && state.timeLeft > 0) {
     return { ...state, timeLeft: state.sessionLength * 60 }
-  } else {
+  } else if (state.sessionType === "Break" && state.timeLeft > 0) {
     return { ...state, timeLeft: state.breakLength * 60 }
+  } else {
+    console.error("updateTimeLeft else triggered");
   }
 }
 
@@ -152,9 +154,11 @@ function App() {
 
   useEffect(() => {
     if (state.timeLeft === 0) {
-      dispatch({ type: "CHANGE_SESSION" });
+      setTimeout(() => {
+        dispatch({ type: "CHANGE_SESSION" });
+      }, 1000);
     }
-  })
+  }, [state.timeLeft]);
 
   useEffect(() => {
 
