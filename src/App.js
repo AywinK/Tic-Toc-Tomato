@@ -46,9 +46,24 @@ const reducer = (state, action) => {
       return { ...state, isPlaying: !state.isPlaying };
 
     case "COUNT_DOWN":
-      return { ...state, timeLeft: state.timeLeft - 1 };
+      if (!!state.isPlaying) {
+        return { ...state, timeLeft: state.timeLeft - 1 };
+      } else {
+        return state;
+      }
+
+    case "CHANGE_SESSION":
+      if (state.sessionType === "Focus") {
+        return { ...state, sessionType: "Break", timeLeft: state.breakLength * 60 }
+      } else if (state.sessionType === "Break") {
+        return { ...state, sessionType: "Break", timeLeft: state.breakLength * 60 }
+      } else {
+        console.error("CHANGE_SESION case else triggered, returned original state");
+        return state;
+      }
 
     default:
+      console.log("unknown case - returning state");
       return state;
   }
 }
@@ -130,7 +145,13 @@ function App() {
         console.log("paused", state.isPlaying)
       }
     }, 1000);
-  }, [state.isPlaying])
+  }, [state.isPlaying]);
+
+  useEffect(() => {
+    if (state.timeLeft === 0) {
+      dispatch({ type: "CHANGE_SESSION" });
+    }
+  })
 
   useEffect(() => {
 
