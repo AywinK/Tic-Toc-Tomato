@@ -10,9 +10,12 @@ import PauseRoundedIcon from '@mui/icons-material/PauseRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 
+let timerVar;
+
 const reducer = (state, action) => {
   switch (action.type) {
     case "RESET":
+      clearInterval(timerVar);
       return init();
 
     case "BREAK-INC":
@@ -138,7 +141,7 @@ function App() {
   }, [isPlaying]);
 
   useEffect(() => {
-    setInterval(() => {
+    timerVar = setInterval(() => {
       if (!!state.isPlaying) {
         dispatch({ type: "COUNT_DOWN" });
       } else if (state.isPlaying === false) {
