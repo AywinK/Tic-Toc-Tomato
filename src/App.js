@@ -10,9 +10,12 @@ import PauseRoundedIcon from '@mui/icons-material/PauseRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 
+let timerVar;
+
 const reducer = (state, action) => {
   switch (action.type) {
     case "RESET":
+      clearInterval(timerVar);
       return init();
 
     case "BREAK-INC":
@@ -46,9 +49,24 @@ const reducer = (state, action) => {
       return { ...state, isPlaying: !state.isPlaying };
 
     case "COUNT_DOWN":
-      return { ...state, timeLeft: state.timeLeft - 1 };
+      if (!!state.isPlaying) {
+        return { ...state, timeLeft: state.timeLeft - 1 };
+      } else {
+        return state;
+      }
+
+    case "CHANGE_SESSION":
+      if (state.sessionType === "Focus") {
+        return { ...state, sessionType: "Break", timeLeft: state.breakLength * 60 - 1 }
+      } else if (state.sessionType === "Break") {
+        return { ...state, sessionType: "Focus", timeLeft: state.sessionLength * 60 - 1 }
+      } else {
+        console.error("CHANGE_SESION case else triggered, returned original state");
+        return state;
+      }
 
     default:
+      console.log("unknown case - returning state");
       return state;
   }
 }
@@ -67,10 +85,12 @@ function init() {
 }
 
 const updateTimeLeft = (state) => {
-  if (state.sessionType === "Focus") {
+  if (state.sessionType === "Focus" && state.timeLeft > 0) {
     return { ...state, timeLeft: state.sessionLength * 60 }
-  } else {
+  } else if (state.sessionType === "Break" && state.timeLeft > 0) {
     return { ...state, timeLeft: state.breakLength * 60 }
+  } else {
+    console.error("updateTimeLeft else triggered");
   }
 }
 
@@ -123,14 +143,22 @@ function App() {
   }, [isPlaying]);
 
   useEffect(() => {
-    setInterval(() => {
+    timerVar = setInterval(() => {
       if (!!state.isPlaying) {
         dispatch({ type: "COUNT_DOWN" });
       } else if (state.isPlaying === false) {
         console.log("paused", state.isPlaying)
       }
     }, 1000);
-  }, [state.isPlaying])
+  }, [state.isPlaying]);
+
+  useEffect(() => {
+    if (state.timeLeft === 0) {
+      setTimeout(() => {
+        dispatch({ type: "CHANGE_SESSION" });
+      }, 1000);
+    }
+  }, [state.timeLeft]);
 
   useEffect(() => {
 
