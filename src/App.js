@@ -1,4 +1,4 @@
-import { useRef, useEffect, useReducer } from 'react';
+import { useRef, useEffect, useState, useReducer } from 'react';
 
 import './App.css';
 
@@ -127,7 +127,6 @@ function App() {
   };
 
   const audioRef = useRef(null);
-  console.log(audioRef);
 
   useEffect(() => {
     timerVar = setInterval(() => {
@@ -142,14 +141,15 @@ function App() {
   useEffect(() => {
     if (state.timeLeft === 0) {
       audioRef.current.play();
-      dispatch({ type: "CHANGE_SESSION" });
+      setTimeout(() => {
+        dispatch({ type: "CHANGE_SESSION" });
+        console.log(audioRef.current.duration)
+      }, 1000);
     }
   }, [state.timeLeft]);
 
   useEffect(() => {
-
     handleUpdateTimeLeft();
-
   }, [state.sessionLength, state.breakLength, state.sessionType]);
 
   const conditionallyFormattedMins = Math.floor(state.timeLeft / 60) >= 10 ? `${Math.floor(state.timeLeft / 60)}` : `0${Math.floor(state.timeLeft / 60)}`;
@@ -160,8 +160,8 @@ function App() {
     <div className="App">
       <audio
         onPlaying={() => {
-          if (state.timeLeft > 5) {
-            audioRef.current.time = 0;
+          if (state.timeLeft > 59) {
+            audioRef.current.time = 0
           }
         }}
         onEnded={() => {
