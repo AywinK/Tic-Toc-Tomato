@@ -71,6 +71,12 @@ const reducer = (state, action) => {
   }
 }
 
+function resetAudio(audioRef) {
+  audioRef.current.pause();
+  audioRef.current.currentTime = 0;
+  return ""
+}
+
 function init() {
 
   const initialState = {
@@ -107,6 +113,7 @@ function App() {
   };
 
   const handleReset = () => {
+    resetAudio(audioRef);
     dispatch({ type: "RESET" });
   };
 
@@ -160,8 +167,9 @@ function App() {
     <div className="App">
       <audio
         onPlaying={() => {
-          if (state.timeLeft > 59) {
-            audioRef.current.time = 0
+          if (state.timeLeft > 59 && !state.isPlaying) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0
           }
         }}
         onEnded={() => {
