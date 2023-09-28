@@ -49,7 +49,7 @@ const reducer = (state, action) => {
       return { ...state, isPlaying: !state.isPlaying };
 
     case "COUNT_DOWN":
-      if (!!state.isPlaying) {
+      if (!!state.isPlaying && state.timeLeft > 0) {
         return { ...state, timeLeft: state.timeLeft - 1 };
       } else {
         return state;
@@ -166,12 +166,16 @@ function App() {
 
   }, [state.sessionLength, state.breakLength, state.sessionType]);
 
+  const conditionallyFormattedMins = Math.floor(state.timeLeft / 60) >= 10 ? `${Math.floor(state.timeLeft / 60)}` : `0${Math.floor(state.timeLeft / 60)}`;
+  const conditionallyFormattedSecs = state.timeLeft % 60 < 10 ? `0${state.timeLeft % 60}` : state.timeLeft % 60;
+  const conditionallyFormattedTimer = `${conditionallyFormattedMins}:${conditionallyFormattedSecs}`;
+
   return (
     <div className="App">
       <audio ref={audioRef} id="beep" src={beep} preload="auto" type="audio/mp3"></audio>
       <h1 className="title">Tic Toc Tomato</h1>
       <h2 id="timer-label">{state.sessionType}</h2>
-      <span id="time-left">{`${Math.floor(state.timeLeft / 60)}:`}{state.timeLeft % 60 < 10 ? `0${state.timeLeft % 60}` : state.timeLeft % 60}</span>
+      <span id="time-left">{conditionallyFormattedTimer}</span>
       <button className="btn" onClick={() => {
         handlePlayAudio();
         handleUpdateIsPlaying();
