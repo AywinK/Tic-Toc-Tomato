@@ -126,21 +126,8 @@ function App() {
     dispatch({ type: "SESSION-DEC" })
   };
 
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const handlePlayAudio = () => {
-    setIsPlaying(true);
-  };
-
   const audioRef = useRef(null);
-  // console.log(audioRef);
-
-  useEffect(() => {
-    if (isPlaying) {
-      audioRef.current.play();
-      setIsPlaying(false);
-    }
-  }, [isPlaying]);
+  console.log(audioRef);
 
   useEffect(() => {
     timerVar = setInterval(() => {
@@ -154,9 +141,8 @@ function App() {
 
   useEffect(() => {
     if (state.timeLeft === 0) {
-      setTimeout(() => {
-        dispatch({ type: "CHANGE_SESSION" });
-      }, 1000);
+      audioRef.current.play();
+      dispatch({ type: "CHANGE_SESSION" });
     }
   }, [state.timeLeft]);
 
@@ -172,12 +158,20 @@ function App() {
 
   return (
     <div className="App">
-      <audio ref={audioRef} id="beep" src={beep} preload="auto" type="audio/mp3"></audio>
+      <audio
+        onPlaying={() => {
+          if (state.timeLeft > 5) {
+            audioRef.current.time = 0;
+          }
+        }}
+        onEnded={() => {
+          audioRef.current.time = 0;
+        }}
+        ref={audioRef} id="beep" src={beep} preload="auto" type="audio/mp3"></audio>
       <h1 className="title">Tic Toc Tomato</h1>
       <h2 id="timer-label">{state.sessionType}</h2>
       <span id="time-left">{conditionallyFormattedTimer}</span>
       <button className="btn" onClick={() => {
-        handlePlayAudio();
         handleUpdateIsPlaying();
       }} id="start_stop">{!state.isPlaying ? <PlayArrowRoundedIcon fontSize="large" /> : <PauseRoundedIcon fontSize="large" />}</button>
       <div id="secondary-controls">
